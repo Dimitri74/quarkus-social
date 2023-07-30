@@ -1,10 +1,16 @@
 package io.github.mdimitri.rest;
 
+import java.util.Set;
+
 import io.github.mdimitri.domain.model.User;
+import io.github.mdimitri.repository.UserRepository;
 import io.github.mdimitri.rest.dto.CreateUserRequest;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import io.github.mdimitri.rest.dto.ResponseError;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -21,25 +27,41 @@ import jakarta.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
 	
+	 private UserRepository repository;
+	 private Validator validator;
+
+	    @Inject
+	    public UserResource(UserRepository repository, Validator validator){
+	        this.repository = repository;
+	        this.validator = validator;
+	    }
+	
 	    @POST
 	    @Transactional
 	    public Response createUser( CreateUserRequest userRequest ){
-	    	
-	    	
-	    	 User user = new User();
-	         user.setAge(userRequest.getAge());
-	         user.setName(userRequest.getName());
-	         user.persist();
 
-		       return Response.ok(user).build();
-	                /*.status(Response.Status.CREATED.getStatusCode())
+	        Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(userRequest);
+	        if(!violations.isEmpty()){
+	            return ResponseError
+	                    .createFromValidation(violations)
+	                    .withStatusCode(ResponseError.UNPROCESSABLE_ENTITY_STATUS);
+	        }
+
+	        User user = new User();
+	        user.setAge(userRequest.getAge());
+	        user.setName(userRequest.getName());
+
+	        repository.persist(user);
+
+	        return Response
+	                .status(Response.Status.CREATED.getStatusCode())
 	                .entity(user)
-	                .build();*/
+	                .build();
 	    }
 	    
 	    @GET
 	    public Response listAllUsers(){
-	        PanacheQuery<PanacheEntityBase> query = User.findAll();
+	        PanacheQuery<User> query = repository.findAll();
 	        return Response.ok(query.list()).build();
 	    }
 	    
