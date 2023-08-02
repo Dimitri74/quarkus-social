@@ -16,7 +16,7 @@ import jakarta.ws.rs.core.Response;
  *
  */
 public class ResponseError {
-	  public static final int UNPROCESSABLE_ENTITY_STATUS = 0;
+	  public static final int UNPROCESSABLE_ENTITY_STATUS = 422;
 	  
 	private String message;
 	    private Collection<FieldError> errors;
