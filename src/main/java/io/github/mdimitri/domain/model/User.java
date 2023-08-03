@@ -13,7 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 /**
- * @author dell
+ * @author Marcus Dimitri
  *
  */
 @Entity
