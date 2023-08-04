@@ -16,7 +16,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 /**
- * @author dell
+ * @author Marcus Dimitri
  *
  */
 @Entity
