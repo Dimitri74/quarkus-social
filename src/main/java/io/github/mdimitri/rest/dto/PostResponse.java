@@ -14,12 +14,12 @@ import io.github.mdimitri.domain.model.Post;
 public class PostResponse {
 	
 	   private String text;
-	    private LocalDateTime dateTime;
+	    private LocalDateTime dataTime;
 	    
 	    public static PostResponse fromEntity(Post post){
 	        var response = new PostResponse();
 	        response.setText(post.getText());
-	        response.setDateTime(post.getDataTime());
+	        response.setDataTime(post.getDataTime());
 	        return response;
 	    }
 
@@ -38,18 +38,20 @@ public class PostResponse {
 		}
 
 		/**
-		 * @return the dateTime
+		 * @return the dataTime
 		 */
-		public LocalDateTime getDateTime() {
-			return dateTime;
+		public LocalDateTime getDataTime() {
+			return dataTime;
 		}
 
 		/**
-		 * @param dateTime the dateTime to set
+		 * @param dataTime the dataTime to set
 		 */
-		public void setDateTime(LocalDateTime dateTime) {
-			this.dateTime = dateTime;
+		public void setDataTime(LocalDateTime dataTime) {
+			this.dataTime = dataTime;
 		}
+
+		
 	    
 	    
 

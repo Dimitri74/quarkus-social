@@ -21,29 +21,24 @@ import jakarta.enterprise.context.ApplicationScoped;
  */
 @ApplicationScoped
 public class FollowerRepository implements PanacheRepository<Follower> {
-	
-	  public boolean follows(User follower, User user){
-	        var params = Parameters.with("follower", follower)
-	                .and("user", user).map();
 
-	        PanacheQuery<Follower> query = find("follower = :follower and user = :user ", params);
-	        Optional<Follower> result = query.firstResultOptional();
+	public boolean follows(User follower, User user) {
+		var params = Parameters.with("follower", follower).and("user", user).map();
 
-	        return result.isPresent();
-	    }
+		PanacheQuery<Follower> query = find("follower = :follower and user = :user ", params);
+		Optional<Follower> result = query.firstResultOptional();
 
-	    public List<Follower> findByUser(Long userId){
-	        PanacheQuery<Follower> query = find("user.id", userId);
-	        return query.list();
-	    }
+		return result.isPresent();
+	}
 
-	    public void deleteByFollowerAndUser(Long followerId, Long userId) {
-	        var params = Parameters
-	                .with("userId", userId)
-	                .and("followerId", followerId)
-	                .map();
+	public List<Follower> findByUser(Long userId) {
+		PanacheQuery<Follower> query = find("user.id", userId);
+		return query.list();
+	}
 
-	        delete("follower.id =:followerId and user.id =: userId", params);
-	    }
+	public void deleteByFollowerAndUser(Long followerId, Long userId) {
+		var params = Parameters.with("userId", userId).and("followerId", followerId).map();
 
+		delete("follower.id =:followerId and user.id =: userId", params);
+	}
 }
